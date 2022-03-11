@@ -1275,10 +1275,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GuardianType: 1
   enemiesList: []
-  BulletPrefab: {fileID: 0}
   FirePosition: {fileID: 1549202882545229094}
+  CactusPrefab: {fileID: 0}
   SoulStreamLineRenderer: {fileID: 3115758250001390760}
   SoulStreamHitEffect: {fileID: 1413381149580680545}
+  LightningPrefab: {fileID: 0}
 --- !u!135 &-8660601557196256672
 SphereCollider:
   m_ObjectHideFlags: 0

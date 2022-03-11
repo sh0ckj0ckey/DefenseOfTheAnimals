@@ -863,7 +863,7 @@ GameObject:
   - component: {fileID: 51940729}
   - component: {fileID: 51940728}
   m_Layer: 5
-  m_Name: Image
+  m_Name: MoneyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8598,6 +8598,9 @@ MonoBehaviour:
   - EnemyPrefab: {fileID: 8592446992146143621, guid: 5fab658ebc686804eadde461c5172ab4, type: 3}
     Count: 4
     Rate: 1
+  - EnemyPrefab: {fileID: 7181819792768094304, guid: 235040ef9c81ab347ba27f4a6cad6892, type: 3}
+    Count: 1
+    Rate: 1
   StartPoint: {fileID: 79960975}
   WaveRate: 1.8
 --- !u!4 &837519346
@@ -8626,33 +8629,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9304feb72d77a4e42a3da7c64f13d006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalTurret:
-    turretPrefab: {fileID: 5924021184166005708, guid: b6eef362c75fa7647baf76c3667dc386, type: 3}
-    cost: 10
-    turretUpgradePrefab: {fileID: 5924021184166005708, guid: b6eef362c75fa7647baf76c3667dc386, type: 3}
-    costUpgraded: 10
+  CactusGuardian:
+    GuardianPrefab: {fileID: 5924021184166005708, guid: b6eef362c75fa7647baf76c3667dc386, type: 3}
+    Cost: 10
+    UpgradeCost: 20
     type: 0
-  advanceTurret:
-    turretPrefab: {fileID: 1543327990071127160, guid: 49f55c90d7df17140aa73fd5586911a3, type: 3}
-    cost: 20
-    turretUpgradePrefab: {fileID: 1543327990071127160, guid: 49f55c90d7df17140aa73fd5586911a3, type: 3}
-    costUpgraded: 20
+  SoulStreamGuardian:
+    GuardianPrefab: {fileID: 1543327990071127160, guid: 49f55c90d7df17140aa73fd5586911a3, type: 3}
+    Cost: 20
+    UpgradeCost: 40
     type: 1
-  superTurret:
-    turretPrefab: {fileID: 5616586915439649088, guid: 43d2b1b41e21ece4a87c6d4e60082000, type: 3}
-    cost: 50
-    turretUpgradePrefab: {fileID: 5616586915439649088, guid: 43d2b1b41e21ece4a87c6d4e60082000, type: 3}
-    costUpgraded: 50
+  ChainLightningGuardian:
+    GuardianPrefab: {fileID: 5616586915439649088, guid: 43d2b1b41e21ece4a87c6d4e60082000, type: 3}
+    Cost: 50
+    UpgradeCost: 100
     type: 2
-  selectedTurretData:
-    turretPrefab: {fileID: 0}
-    cost: 0
-    turretUpgradePrefab: {fileID: 0}
-    costUpgraded: 0
-    type: 0
-  moneyText: {fileID: 89882810}
-  moneyAnimator: {fileID: 89882812}
-  money: 100
+  ChaosMeteor:
+    GuardianPrefab: {fileID: 3754797761512685459, guid: a15594b786fa88348a3a2e6518ff1eb4, type: 3}
+    Cost: 80
+    UpgradeCost: 0
+    type: 3
+  MoneyText: {fileID: 89882810}
+  MoneyAnimator: {fileID: 89882812}
+  Money: 50
 --- !u!1001 &843798022
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12884,7 +12883,7 @@ GameObject:
   - component: {fileID: 1290626198}
   - component: {fileID: 1290626197}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -5,14 +5,7 @@ using UnityEngine;
 
 public class Guardian : MonoBehaviour
 {
-    public enum AttackType
-    {
-        Cactus,     // œ…»Àº‚¥Ã
-        SoulStream, // ¡ÈªÍº§¡˜
-        ChaosMeteor // ªÏ„Á‘… Ø
-    }
-
-    public AttackType GuardianType;
+    public GuardianType GuardianType;
 
     public List<GameObject> enemiesList = new List<GameObject>();
 
@@ -34,23 +27,29 @@ public class Guardian : MonoBehaviour
         }
     }
 
-    private float cactusAttackRate = 0.7f;      // π•ª˜∆µ¬ (x√Î/¥Œ)
+    private float cactusAttackRate = 1.2f;          // π•ª˜∆µ¬ (x√Î/¥Œ)
     private float cactusAttackTimer = 0;
 
-    private float soulStreamDamageRate = 40f;    // …À∫¶÷µ(…À∫¶/√Î)
+    private float soulStreamDamageRate = 40f;       // …À∫¶÷µ(…À∫¶/√Î)
 
-    public GameObject BulletPrefab;
+    private float chainLightningAttackRate = 1.4f;  // π•ª˜∆µ¬ (x√Î/¥Œ)
+    private float chainLightningAttackTimer = 0;
+
     public Transform FirePosition;
+
+    public GameObject CactusPrefab;
 
     public LineRenderer SoulStreamLineRenderer;
     public GameObject SoulStreamHitEffect;
+
+    public GameObject LightningPrefab;
 
     void Start()
     {
         cactusAttackTimer = cactusAttackRate;
         animator = GetComponent<Animator>();
-        //SoulStreamLineRenderer.transform.position += SoulStreamHitEffect.transform.up * (-10);
-        SoulStreamLineRenderer.enabled = false;
+
+        HideSoulStream();
     }
 
     void Update()
@@ -64,7 +63,7 @@ public class Guardian : MonoBehaviour
         }
 
         // π•ª˜¥¶¿Ì
-        if (this.GuardianType == AttackType.Cactus)
+        if (this.GuardianType == GuardianType.Cactus)
         {
             if (enemiesList.Count > 0)
             {
@@ -72,19 +71,15 @@ public class Guardian : MonoBehaviour
                 if (cactusAttackTimer >= cactusAttackRate)
                 {
                     cactusAttackTimer -= cactusAttackRate;
-                    animator.SetBool("IsAttacking", true);
+                    animator.SetTrigger("IsCactusAttacking");
                     StartCoroutine(DelayInvoker.DelayToInvoke(() =>
                     {
-                        Attack();
+                        CactusAttack();
                     }, 0.3f));
                 }
             }
-            else
-            {
-                animator.SetBool("IsAttacking", false);
-            }
         }
-        else if (this.GuardianType == AttackType.SoulStream)
+        else if (this.GuardianType == GuardianType.SoulStream)
         {
             if (enemiesList.Count > 0)
             {
@@ -110,7 +105,7 @@ public class Guardian : MonoBehaviour
                             SoulStreamLineRenderer.SetPositions(new Vector3[] { FirePosition.position, enemyPos });
 
                             // ‘Ï≥……À∫¶
-                            enemiesList[0].GetComponent<Enemy>().TakeDamage(soulStreamDamageRate * Time.deltaTime);
+                            enemiesList[0].GetComponent<Enemy>().TakeCactusDamage(soulStreamDamageRate * Time.deltaTime);
 
                             // ÃÌº”Ãÿ–ß
                             SoulStreamHitEffect.transform.position = enemiesList[0].transform.position;
@@ -142,9 +137,25 @@ public class Guardian : MonoBehaviour
                 HideSoulStream();
             }
         }
+        else if (this.GuardianType == GuardianType.ChainLightning)
+        {
+            if (enemiesList.Count > 0)
+            {
+                chainLightningAttackTimer += Time.deltaTime;
+                if (chainLightningAttackTimer >= chainLightningAttackRate)
+                {
+                    chainLightningAttackTimer -= chainLightningAttackRate;
+                    animator.SetTrigger("IsLightningAttacking");
+                    StartCoroutine(DelayInvoker.DelayToInvoke(() =>
+                    {
+                        ChainLightningAttack();
+                    }, 0.3f));
+                }
+            }
+        }
     }
 
-    void Attack()
+    void CactusAttack()
     {
         if (enemiesList.Count <= 0 || enemiesList[0] == null)
         {
@@ -153,12 +164,35 @@ public class Guardian : MonoBehaviour
 
         if (enemiesList.Count > 0)
         {
-            var bullet = GameObject.Instantiate(BulletPrefab, FirePosition.position, FirePosition.rotation);
-            bullet.GetComponent<Bullet>().SetTarget(enemiesList[0].transform);
+            var bullet = GameObject.Instantiate(CactusPrefab, FirePosition.position, FirePosition.rotation);
+            bullet.GetComponent<CactusBullet>().SetTarget(enemiesList[0].transform);
         }
         else
         {
             cactusAttackTimer = cactusAttackRate;
+        }
+
+    }
+
+    void ChainLightningAttack()
+    {
+        if (enemiesList.Count <= 0 || enemiesList[0] == null)
+        {
+            UpdateEnemies();
+        }
+
+        if (enemiesList.Count > 0)
+        {
+            var bullet = GameObject.Instantiate(LightningPrefab, FirePosition.position, FirePosition.rotation);
+            bullet.GetComponent<LightningBullet>().SetTarget(enemiesList[0].transform);
+            //var chain = GameObject.Instantiate(LightningPrefab, FirePosition.position, FirePosition.rotation);
+            //var lightning = chain.GetComponent<UVChainLightning>();
+            //lightning.ChainStart = FirePosition;
+            //lightning.ChainEnd = enemiesList[0].transform;
+        }
+        else
+        {
+            chainLightningAttackTimer = chainLightningAttackRate;
         }
 
     }

@@ -8,23 +8,24 @@ public class BuildManager : MonoBehaviour
 {
     public static BuildManager Instance { get; private set; }
 
-    public GuardianData normalTurret;
-    public GuardianData advanceTurret;
-    public GuardianData superTurret;
+    public GuardianData CactusGuardian;
+    public GuardianData SoulStreamGuardian;
+    public GuardianData ChainLightningGuardian;
+    public GuardianData ChaosMeteor;
 
-    // 当前选中的炮台
-    public GuardianData selectedTurretData = null;
+    // 当前选中的守卫
+    private GuardianData selectedGuardian = null;
 
-    public Text moneyText;
+    public Text MoneyText;
 
-    public Animator moneyAnimator;
+    public Animator MoneyAnimator;
 
-    public int money = 50;
+    public int Money = 50;
 
     public void AddMoney(int change = 0)
     {
-        money += change;
-        moneyText.text = money.ToString();
+        Money += change;
+        MoneyText.text = Money.ToString();
     }
 
     private void Awake()
@@ -34,7 +35,7 @@ public class BuildManager : MonoBehaviour
 
     private void Start()
     {
-        selectedTurretData = normalTurret;
+        selectedGuardian = CactusGuardian;
     }
 
     private void Update()
@@ -52,14 +53,14 @@ public class BuildManager : MonoBehaviour
                     MapCube mapCube = hit.collider.GetComponent<MapCube>();   // 得到点击的MapCube
                     if (mapCube.turretGo == null)
                     {
-                        if (money >= selectedTurretData.cost)
+                        if (Money >= selectedGuardian.Cost)
                         {
-                            AddMoney(-selectedTurretData.cost);
-                            mapCube.BuildTurret(selectedTurretData.turretPrefab);
+                            AddMoney(-selectedGuardian.Cost);
+                            mapCube.BuildTurret(selectedGuardian.GuardianPrefab);
                         }
                         else
                         {
-                            moneyAnimator.SetTrigger("Flick");
+                            MoneyAnimator.SetTrigger("Flick");
                         }
                     }
                     else
@@ -75,21 +76,21 @@ public class BuildManager : MonoBehaviour
     {
         if (isOn)
         {
-            selectedTurretData = normalTurret;
+            selectedGuardian = CactusGuardian;
         }
     }
     public void OnAdvanceSelected(bool isOn)
     {
         if (isOn)
         {
-            selectedTurretData = advanceTurret;
+            selectedGuardian = SoulStreamGuardian;
         }
     }
     public void OnSuperSelected(bool isOn)
     {
         if (isOn)
         {
-            selectedTurretData = superTurret;
+            selectedGuardian = ChainLightningGuardian;
         }
     }
 }

@@ -8,7 +8,8 @@ public class Enemy : MonoBehaviour
     public enum EnemyType
     {
         Slime,
-        Turtle
+        Turtle,
+        Boss
     }
 
     private float speed = 8;
@@ -102,7 +103,11 @@ public class Enemy : MonoBehaviour
         catch { }
     }
 
-    public void TakeDamage(float damage)
+    /// <summary>
+    /// 受到仙人球的伤害
+    /// </summary>
+    /// <param name="damage">伤害值</param>
+    public void TakeCactusDamage(float damage)
     {
         if (CurrentHp > 0)
         {
@@ -115,6 +120,28 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 收到连环闪电的伤害
+    /// </summary>
+    /// <param name="damage">伤害值</param>
+    /// <param name="leapTimes">跳跃次数</param>
+    /// <param name="chainId">这条连环闪电的ID，用于标记受到作用的敌人</param>
+    public void TakeLightningDamage(float damage, int leapTimes, long chainId)
+    {
+        if (CurrentHp > 0)
+        {
+            CurrentHp -= damage;
+            hpSlider.value = (float)CurrentHp / TotalHp;
+            if (CurrentHp <= 0)
+            {
+                Die();
+            }
+        }
+
+        // 寻找下一个跳跃目标，不可重复，当跳跃到这个目标身上后添加一个标记，拥有标记的就不会再跳跃
+
+    }
+
     private void Die()
     {
         switch (Type)
@@ -124,6 +151,9 @@ public class Enemy : MonoBehaviour
                 break;
             case EnemyType.Turtle:
                 BuildManager.Instance.AddMoney(10);
+                break;
+            case EnemyType.Boss:
+                BuildManager.Instance.AddMoney(9999);
                 break;
             default:
                 break;

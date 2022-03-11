@@ -5,16 +5,16 @@ using UnityEngine;
 [System.Serializable]
 public class GuardianData
 {
-    public GameObject turretPrefab;
-    public int cost;
-    public GameObject turretUpgradePrefab;
-    public int costUpgraded;
-    public TurretType type;
+    public GameObject GuardianPrefab;
+    public int Cost;
+    public int UpgradeCost;
+    public GuardianType type;
 }
 
-public enum TurretType
+public enum GuardianType
 {
-    Normal,
-    Advance,
-    Super
+    Cactus,         // œ…»À¥Ã«Ú
+    SoulStream,     // ¡ÈªÍº§¡˜
+    ChainLightning, // ¡¨ª∑…¡µÁ
+    ChaosMeteor     // ªÏ„Á‘… Ø
 }
