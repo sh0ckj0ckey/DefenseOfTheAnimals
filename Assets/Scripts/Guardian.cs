@@ -206,11 +206,14 @@ public class Guardian : MonoBehaviour
 
     void HideSoulStream()
     {
-        //SoulStreamLineRenderer.SetPositions(new Vector3[] { FirePosition.position, FirePosition.position });
-        //SoulStreamLineRenderer.transform.position += SoulStreamHitEffect.transform.up * (-10);
-        SoulStreamLineRenderer.enabled = false;
+        if (this.GuardianType == GuardianType.SoulStream)
+        {
+            //SoulStreamLineRenderer.SetPositions(new Vector3[] { FirePosition.position, FirePosition.position });
+            //SoulStreamLineRenderer.transform.position += SoulStreamHitEffect.transform.up * (-10);
+            SoulStreamLineRenderer.enabled = false;
 
-        SoulStreamHitEffect.transform.position = FirePosition.position;
-        SoulStreamHitEffect.transform.position += SoulStreamHitEffect.transform.up * (-10);
+            SoulStreamHitEffect.transform.position = FirePosition.position;
+            SoulStreamHitEffect.transform.position += SoulStreamHitEffect.transform.up * (-10);
+        }
     }
 }

@@ -145,8 +145,9 @@ public class Enemy : MonoBehaviour
             {
                 //StartCoroutine(DelayInvoker.DelayToInvoke(() =>
                 //{
-                Die();
+                //  Die();
                 //}, 1f));
+                Die();
             }
             else
             {
@@ -173,15 +174,11 @@ public class Enemy : MonoBehaviour
     /// <param name="chainId">这条连环闪电的ID，用于标记受到作用的敌人</param>
     public void TakeLightningLeap(float leapDamage, int leapTimes, long chainId, GameObject chainLightningPrefab)
     {
+        DebuffTag = chainId;
+
         if (leapTimes > LightningBullet.LightningChainLeapMaxTime)
         {
             return;
-        }
-
-        // 跳跃次数大于0才受到伤害，为0表示这是第一个被击中的敌人，这个敌人只受到击中伤害，不受跳跃伤害
-        if (leapTimes > 0)
-        {
-
         }
 
         // queryTriggerInteraction	指定该查询是否应该命中触发器。
@@ -199,6 +196,7 @@ public class Enemy : MonoBehaviour
             {
                 continue;
             }
+
             var chain = GameObject.Instantiate(chainLightningPrefab, transform.position, transform.rotation);
             var lightning = chain.GetComponent<UVChainLightning>();
             lightning.Detail = 2;
@@ -210,10 +208,26 @@ public class Enemy : MonoBehaviour
             {
                 lightning.ClearChainLightning();
                 Destroy(lightning);
-            }, 1f));
+                Destroy(chain);
+            }, 0.5f));
 
             enemy.TakeLightningLeap(leapDamage, leapTimes + 1, chainId, chainLightningPrefab);
             break;
+        }
+
+        // 跳跃次数大于0才受到伤害，为0表示这是第一个被击中的敌人，这个敌人只受到击中伤害，不受跳跃伤害
+        if (leapTimes > 0)
+        {
+            if (CurrentHp > 0)
+            {
+                CurrentHp -= leapDamage;
+                hpSlider.value = (float)CurrentHp / TotalHp;
+            }
+
+            if (CurrentHp <= 0)
+            {
+                Die();
+            }
         }
     }
 
