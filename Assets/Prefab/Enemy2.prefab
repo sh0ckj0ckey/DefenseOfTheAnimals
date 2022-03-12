@@ -1314,6 +1314,10 @@ MonoBehaviour:
   DieEffect: {fileID: 5751608088605821421, guid: 723a79dc3ddf6294984da625a05958cd, type: 3}
   SelfBody: {fileID: 5491920332955503263}
   Type: 1
+  EnemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  DebuffTag: 0
 --- !u!65 &5002624834833162538
 BoxCollider:
   m_ObjectHideFlags: 0

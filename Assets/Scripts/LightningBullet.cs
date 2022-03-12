@@ -8,8 +8,12 @@ public class LightningBullet : MonoBehaviour
     // 连环闪电最大跳跃次数
     public static int LightningChainLeapMaxTime = 3;
 
-    public int Damage = 20;
-    public float Speed = 20;
+    // 跳跃检测范围
+    public static int LightningChainLeapRadius = 8;
+
+    public int Damage = 40;
+    public int LeapDamage = 30;
+    public float Speed = 30;
 
     private float distanceArriveTarget = 1.2f;
 
@@ -35,11 +39,12 @@ public class LightningBullet : MonoBehaviour
         transform.LookAt(target.position);
         transform.Translate(Vector3.forward * Speed * Time.deltaTime);
 
+
         Vector3 dir = target.position - transform.position;
         if (dir.magnitude < distanceArriveTarget)
         {
             long chainId = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-            target.GetComponent<Enemy>().TakeLightningDamage(Damage, 0, chainId);
+            target.GetComponent<Enemy>().TakeLightningDamage(Damage, LeapDamage, chainId, ChainLightningPrefab);
             DestroyBullet();
         }
     }

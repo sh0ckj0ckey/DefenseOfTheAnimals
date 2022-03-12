@@ -587,6 +587,11 @@ MonoBehaviour:
   TotalHp: 200
   DieEffect: {fileID: 5751608088605821421, guid: 7b39e99561c30884c8f12240a6441c06, type: 3}
   SelfBody: {fileID: 6205283136886566979}
+  Type: 0
+  EnemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  DebuffTag: 0
 --- !u!65 &6350074829241538567
 BoxCollider:
   m_ObjectHideFlags: 0

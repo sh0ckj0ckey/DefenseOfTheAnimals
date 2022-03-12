@@ -189,10 +189,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5851fb6bddc62842b42c3a44edbf8b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 20
+  Damage: 40
+  LeapDamage: 30
   Speed: 20
   ChainLightningPrefab: {fileID: 2946145779337341030, guid: ed9e6b3813a00ae4b8dac92a8cc33dce, type: 3}
-  ExplosionEffectPrefab: {fileID: 0}
+  ExplosionEffectPrefab: {fileID: 6485446584281342100, guid: 12c054ee89db5104db4ab97dd2ab0b30, type: 3}
 --- !u!135 &712000247876480651
 SphereCollider:
   m_ObjectHideFlags: 0

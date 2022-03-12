@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Scripts;
 
 public class Enemy : MonoBehaviour
 {
@@ -27,6 +28,11 @@ public class Enemy : MonoBehaviour
     public GameObject SelfBody; // 模型本身，转向时只转动这个部分，避免血条也一起转动了
 
     public EnemyType Type;
+
+    public LayerMask EnemyLayer;
+
+    // 标记负面状态，例如受到连环闪电的效果时会添加一个标记
+    public long DebuffTag = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -121,25 +127,94 @@ public class Enemy : MonoBehaviour
     }
 
     /// <summary>
-    /// 收到连环闪电的伤害
+    /// 受到连环闪电的伤害
     /// </summary>
     /// <param name="damage">伤害值</param>
-    /// <param name="leapTimes">跳跃次数</param>
+    /// <param name="leapDamage">跳跃伤害</param>
     /// <param name="chainId">这条连环闪电的ID，用于标记受到作用的敌人</param>
-    public void TakeLightningDamage(float damage, int leapTimes, long chainId)
+    public void TakeLightningDamage(float damage, float leapDamage, long chainId, GameObject chainLightningPrefab)
     {
+        DebuffTag = chainId;
+        TakeLightningLeap(leapDamage, 0, chainId, chainLightningPrefab);
+
         if (CurrentHp > 0)
         {
             CurrentHp -= damage;
             hpSlider.value = (float)CurrentHp / TotalHp;
             if (CurrentHp <= 0)
             {
+                //StartCoroutine(DelayInvoker.DelayToInvoke(() =>
+                //{
                 Die();
+                //}, 1f));
+            }
+            else
+            {
+                // 减速一秒钟
+                float origSpeed = speed;
+                speed = 2;
+                StartCoroutine(DelayInvoker.DelayToInvoke(() =>
+                {
+                    speed = origSpeed;
+                }, 1f));
             }
         }
+        else
+        {
+            Die();
+        }
+    }
 
-        // 寻找下一个跳跃目标，不可重复，当跳跃到这个目标身上后添加一个标记，拥有标记的就不会再跳跃
+    /// <summary>
+    /// 连环闪电寻找下一个跳跃目标，不可重复，当跳跃到这个目标身上后添加一个标记，拥有标记的就不会再跳跃
+    /// </summary>
+    /// <param name="leapDamage">跳跃伤害</param>
+    /// <param name="leapTimes">跳跃次数</param>
+    /// <param name="chainId">这条连环闪电的ID，用于标记受到作用的敌人</param>
+    public void TakeLightningLeap(float leapDamage, int leapTimes, long chainId, GameObject chainLightningPrefab)
+    {
+        if (leapTimes > LightningBullet.LightningChainLeapMaxTime)
+        {
+            return;
+        }
 
+        // 跳跃次数大于0才受到伤害，为0表示这是第一个被击中的敌人，这个敌人只受到击中伤害，不受跳跃伤害
+        if (leapTimes > 0)
+        {
+
+        }
+
+        // queryTriggerInteraction	指定该查询是否应该命中触发器。
+        // 可能是受到其他位置的设置，当物体的Collider.IsTrigger为true时检测不到，需要把参数QueryTriggerInteraction调整一下，不要遵循全局设置即可
+        Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, LightningBullet.LightningChainLeapRadius, EnemyLayer, QueryTriggerInteraction.Collide);
+        foreach (var item in enemiesInRange)
+        {
+            if (item.tag != "Enemy")
+            {
+                continue;
+            }
+
+            var enemy = item.GetComponent<Enemy>();
+            if (enemy == null || enemy?.DebuffTag == chainId)
+            {
+                continue;
+            }
+            var chain = GameObject.Instantiate(chainLightningPrefab, transform.position, transform.rotation);
+            var lightning = chain.GetComponent<UVChainLightning>();
+            lightning.Detail = 2;
+            lightning.Displacement = 3;
+            lightning.ChainStart = transform;
+            lightning.ChainEnd = enemy.transform;
+
+            StartCoroutine(DelayInvoker.DelayToInvoke(() =>
+            {
+                lightning.ClearChainLightning();
+                Destroy(lightning);
+            }, 1f));
+
+            enemy.TakeLightningLeap(leapDamage, leapTimes + 1, chainId, chainLightningPrefab);
+            break;
+        }
     }
 
     private void Die()

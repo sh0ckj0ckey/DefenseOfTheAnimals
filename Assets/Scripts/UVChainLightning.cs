@@ -83,4 +83,12 @@ public class UVChainLightning : MonoBehaviour
             CollectLinPos(midPos, destPos, displace / 2);
         }
     }
+
+    public void ClearChainLightning()
+    {
+        enabled = false;
+        lineRender = null;
+        linePosList.Clear();
+        linePosList = null;
+    }
 }

@@ -185,10 +185,6 @@ public class Guardian : MonoBehaviour
         {
             var bullet = GameObject.Instantiate(LightningPrefab, FirePosition.position, FirePosition.rotation);
             bullet.GetComponent<LightningBullet>().SetTarget(enemiesList[0].transform);
-            //var chain = GameObject.Instantiate(LightningPrefab, FirePosition.position, FirePosition.rotation);
-            //var lightning = chain.GetComponent<UVChainLightning>();
-            //lightning.ChainStart = FirePosition;
-            //lightning.ChainEnd = enemiesList[0].transform;
         }
         else
         {
