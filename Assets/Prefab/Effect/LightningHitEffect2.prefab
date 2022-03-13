@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3003148174983947747}
   - component: {fileID: 8863822490594781737}
   m_Layer: 0
-  m_Name: CactusHitEffect
+  m_Name: LightningHitEffect2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4816,7 +4816,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0e4890f47005c3a4fbe1f368c4939d86, type: 2}
+  - {fileID: 2100000, guid: 7abe98f2fbdd1fa49ba3b1e2ceca6f07, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

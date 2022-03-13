@@ -213,7 +213,10 @@ public class Guardian : MonoBehaviour
             SoulStreamLineRenderer.enabled = false;
 
             SoulStreamHitEffect.transform.position = FirePosition.position;
-            SoulStreamHitEffect.transform.position += SoulStreamHitEffect.transform.up * (-10);
+            //SoulStreamHitEffect.transform.position += SoulStreamHitEffect.transform.up * (-20);
+            var pos = SoulStreamHitEffect.transform.position;
+            pos.y = -20;
+            SoulStreamHitEffect.transform.position = pos;
         }
     }
 }
