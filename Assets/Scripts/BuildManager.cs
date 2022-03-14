@@ -11,10 +11,13 @@ public class BuildManager : MonoBehaviour
     public GuardianData CactusGuardian;
     public GuardianData SoulStreamGuardian;
     public GuardianData ChainLightningGuardian;
+
     public GuardianData ChaosMeteor;
+    public GuardianData DeleteGuardian;
+    public GuardianData UpgradeGuardian;
 
     // 当前选中的守卫
-    private GuardianData selectedGuardian = null;
+    public GuardianData SelectedGuardian = null;
 
     public Text MoneyText;
 
@@ -35,7 +38,7 @@ public class BuildManager : MonoBehaviour
 
     private void Start()
     {
-        selectedGuardian = CactusGuardian;
+        SelectedGuardian = CactusGuardian;
     }
 
     private void Update()
@@ -44,53 +47,79 @@ public class BuildManager : MonoBehaviour
         {
             if (EventSystem.current.IsPointerOverGameObject() == false)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                var sss = LayerMask.GetMask("MapCube");
-                bool isCollider = Physics.Raycast(ray, out hit, 1000, sss);
-                if (isCollider)
+                if (SelectedGuardian.type == GuardianType.Cactus ||
+                    SelectedGuardian.type == GuardianType.SoulStream ||
+                    SelectedGuardian.type == GuardianType.ChainLightning)
                 {
-                    MapCube mapCube = hit.collider.GetComponent<MapCube>();   // 得到点击的MapCube
-                    if (mapCube.turretGo == null)
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+                    var map = LayerMask.GetMask("MapCube");
+                    bool isCollider = Physics.Raycast(ray, out hit, 1000, map);
+                    if (isCollider)
                     {
-                        if (Money >= selectedGuardian.Cost)
+                        MapCube mapCube = hit.collider.GetComponent<MapCube>();   // 得到点击的MapCube
+                        if (mapCube.CubeGuardian == null)
                         {
-                            AddMoney(-selectedGuardian.Cost);
-                            mapCube.BuildTurret(selectedGuardian.GuardianPrefab);
+                            if (Money >= SelectedGuardian.Cost)
+                            {
+                                AddMoney(-SelectedGuardian.Cost);
+                                mapCube.SummonGuardian(SelectedGuardian.GuardianPrefab);
+                            }
+                            else
+                            {
+                                MoneyAnimator.SetTrigger("Flick");
+                            }
                         }
                         else
                         {
-                            MoneyAnimator.SetTrigger("Flick");
+                            //升级
                         }
-                    }
-                    else
-                    {
-                        //升级
                     }
                 }
             }
         }
     }
 
-    public void OnNormalSelected(bool isOn)
+    public void OnCactusGuardianSelected(bool isOn)
     {
         if (isOn)
         {
-            selectedGuardian = CactusGuardian;
+            SelectedGuardian = CactusGuardian;
         }
     }
-    public void OnAdvanceSelected(bool isOn)
+    public void OnSoulStreamGuardianSelected(bool isOn)
     {
         if (isOn)
         {
-            selectedGuardian = SoulStreamGuardian;
+            SelectedGuardian = SoulStreamGuardian;
         }
     }
-    public void OnSuperSelected(bool isOn)
+    public void OnChainLightningGuardianSelected(bool isOn)
     {
         if (isOn)
         {
-            selectedGuardian = ChainLightningGuardian;
+            SelectedGuardian = ChainLightningGuardian;
+        }
+    }
+    public void OnChaosMeteorSelected(bool isOn)
+    {
+        if (isOn)
+        {
+            SelectedGuardian = ChaosMeteor;
+        }
+    }
+    public void OnDeleteGuardianSelected(bool isOn)
+    {
+        if (isOn)
+        {
+            SelectedGuardian = DeleteGuardian;
+        }
+    }
+    public void OnUpgradeGuardianSelected(bool isOn)
+    {
+        if (isOn)
+        {
+            SelectedGuardian = UpgradeGuardian;
         }
     }
 }

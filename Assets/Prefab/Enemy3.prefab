@@ -2555,8 +2555,8 @@ GameObject:
   - component: {fileID: 7557360821659994842}
   - component: {fileID: 8028681035825851417}
   - component: {fileID: 891784228446204108}
-  - component: {fileID: -5343773064601483001}
   - component: {fileID: 4989329309897887882}
+  - component: {fileID: -5343773064601483001}
   m_Layer: 6
   m_Name: Enemy3
   m_TagString: Enemy
@@ -2615,19 +2615,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &-5343773064601483001
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7181819792768094304}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4989329309897887882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2644,6 +2631,23 @@ MonoBehaviour:
   DieEffect: {fileID: 5751608088605821421, guid: 723a79dc3ddf6294984da625a05958cd, type: 3}
   SelfBody: {fileID: 284715466537670733}
   Type: 2
+  EnemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  DebuffTag: 0
+--- !u!65 &-5343773064601483001
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7181819792768094304}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7197742999179258025
 GameObject:
   m_ObjectHideFlags: 0

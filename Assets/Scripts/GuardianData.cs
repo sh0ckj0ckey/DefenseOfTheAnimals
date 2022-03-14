@@ -16,5 +16,8 @@ public enum GuardianType
     Cactus,         // 仙人刺球
     SoulStream,     // 灵魂激流
     ChainLightning, // 连环闪电
-    ChaosMeteor     // 混沌陨石
+
+    ChaosMeteor,    // 混沌陨石
+    Delete,         // 移除守卫
+    Upgrade,        // 升级守卫
 }

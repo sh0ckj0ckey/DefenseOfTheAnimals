@@ -6,7 +6,9 @@ using UnityEngine.EventSystems;
 public class MapCube : MonoBehaviour
 {
     [HideInInspector]
-    public GameObject turretGo; //µ±Ç°cubeÉÏ·ÅÖÃµÄÅÚÌ¨
+    public GameObject CubeGuardian;         // å½“å‰æ ¼å­ä¸Šæ”¾ç½®çš„å®ˆå«
+
+    public bool bGuardianUpgraded = false;  // å½“å‰æ ¼å­ä¸Šçš„å®ˆå«æ˜¯å¦å·²ç»å‡çº§
 
     public GameObject buildEffect;
 
@@ -16,37 +18,50 @@ public class MapCube : MonoBehaviour
 
     public Material hoverMaterial;
 
+    private Color upgradeColor = new Color(0, 1, 1);    // æ ¼å­å‡çº§æ˜¾ç¤ºè“è‰²
+    private Color deleteColor = new Color(1, 0, 0);     // æ ¼å­åˆ é™¤æ˜¾ç¤ºçº¢è‰²
+
     private void Start()
     {
         render = GetComponent<Renderer>();
         originMaterial = render.material;
     }
 
-    public void BuildTurret(GameObject turretPrefab)
+    public void SummonGuardian(GameObject guardianPrefab)
     {
-        turretGo = GameObject.Instantiate(turretPrefab, transform.position, Quaternion.identity);           //½Ç¶È 4¸ö0
+        CubeGuardian = GameObject.Instantiate(guardianPrefab, transform.position, Quaternion.identity);    //è§’åº¦ 4ä¸ª0
 
         var pos = transform.position;
         pos.y += 2f;
-        GameObject effect = GameObject.Instantiate(buildEffect, pos, buildEffect.transform.rotation);    //±£³ÖÎïÌåÔ­À´µ÷¹ıµÄ½Ç¶È
+        GameObject effect = GameObject.Instantiate(buildEffect, pos, buildEffect.transform.rotation);    //ä¿æŒç‰©ä½“åŸæ¥è°ƒè¿‡çš„è§’åº¦
         Destroy(effect, 2);
+
+        // è§¦å‘ä¸€ä¸‹é¼ æ ‡Hoverï¼Œä¿®æ”¹æ ¼å­é¢œè‰²
+        //OnMouseEnter();
     }
 
-    // ·ÅÁËÒ»¸öÊØÎÀÖ®ºó£¬Êó±êÔÚÆäÅö×²·¶Î§ÄÚhover·½¿é¾Í²»ÄÜ±äÉ«ÁË£¬È¥Project SettingÀïÃæµÄPhysic°ÑQueries Trigger Hit¹Øµô
+    // æ”¾äº†ä¸€ä¸ªå®ˆå«ä¹‹åï¼Œé¼ æ ‡åœ¨å…¶ç¢°æ’èŒƒå›´å†…hoveræ–¹å—å°±ä¸èƒ½å˜è‰²äº†ï¼Œå»Project Settingé‡Œé¢çš„PhysicæŠŠQueries Trigger Hitå…³æ‰
     private void OnMouseEnter()
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            if (turretGo == null)
+            GuardianType selectedType = BuildManager.Instance.SelectedGuardian.type;
+
+            if (CubeGuardian == null && selectedType != GuardianType.Delete && selectedType != GuardianType.Upgrade)
             {
                 render.material = hoverMaterial;
                 render.material.color = Color.green;
             }
-            //else
-            //{
-            //    renderer.material = hoverMaterial;
-            //    renderer.material.color = Color.red;
-            //}
+            else if (CubeGuardian != null && selectedType == GuardianType.Delete)
+            {
+                render.material = hoverMaterial;
+                render.material.color = deleteColor;
+            }
+            else if (CubeGuardian != null && selectedType == GuardianType.Upgrade && bGuardianUpgraded == false)
+            {
+                render.material = hoverMaterial;
+                render.material.color = upgradeColor;
+            }
         }
     }
 
