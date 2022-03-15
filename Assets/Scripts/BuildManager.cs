@@ -23,9 +23,9 @@ public class BuildManager : MonoBehaviour
 
     public Animator MoneyAnimator;
 
-    public int Money = 50;
+    public double Money = 50;
 
-    public void AddMoney(int change = 0)
+    public void AddMoney(double change = 0)
     {
         Money += change;
         MoneyText.text = Money.ToString();
@@ -75,7 +75,7 @@ public class BuildManager : MonoBehaviour
                         }
                         else if (SelectedGuardian.type == GuardianType.Upgrade)
                         {
-                            if (mapCube.GuardianGameObject != null && mapCube.bGuardianUpgraded == false)
+                            if (mapCube.GuardianGameObject == null && mapCube.CubeGuardian != null && mapCube.CubeGuardian.bGuardianUpgraded == false)
                             {
                                 //Éý¼¶
                                 if (Money >= SelectedGuardian.UpgradeCost)
@@ -91,22 +91,23 @@ public class BuildManager : MonoBehaviour
                             {
                                 //²ð³ý
                                 var guardian = mapCube.GuardianGameObject.GetComponent<Guardian>();
-                                int money = 0;
+                                double money = 0;
                                 switch (guardian.GuardianType)
                                 {
                                     case GuardianType.Cactus:
-                                        money = CactusGuardian.Cost*(0.5+);
+                                        money = CactusGuardian.Cost * (0.5 + (mapCube.CubeGuardian.bGuardianUpgraded ? 0.5 : 0));
                                         break;
                                     case GuardianType.SoulStream:
-                                        money = SoulStreamGuardian.Cost;
+                                        money = SoulStreamGuardian.Cost * (0.5 + (mapCube.CubeGuardian.bGuardianUpgraded ? 0.5 : 0));
                                         break;
                                     case GuardianType.ChainLightning:
-                                        money = ChainLightningGuardian.Cost;
+                                        money = ChainLightningGuardian.Cost * (0.5 + (mapCube.CubeGuardian.bGuardianUpgraded ? 0.5 : 0));
                                         break;
                                     default:
                                         break;
                                 }
-                                AddMoney(0);
+                                AddMoney(money);
+                                mapCube.DeleteGuardian();
                             }
                         }
                     }

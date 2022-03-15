@@ -11,6 +11,7 @@ public class MapCube : MonoBehaviour
     [HideInInspector]
     public Guardian CubeGuardian;                       // 当前格子上放置的守卫
 
+    private GameObject upgradedGuardianEffect;
     public GameObject GuardianBuildEffect;              // 放置守卫特效
     public GameObject GuardianUpgradedEffect;           // 升级守卫光环特效
 
@@ -47,12 +48,12 @@ public class MapCube : MonoBehaviour
     {
         if (GuardianGameObject != null && CubeGuardian.bGuardianUpgraded == false)
         {
-            GuardianUpgradedEffect = GameObject.Instantiate(GuardianUpgradedEffect, transform.position, GuardianUpgradedEffect.transform.rotation);
+            upgradedGuardianEffect = GameObject.Instantiate(GuardianUpgradedEffect, transform.position, GuardianUpgradedEffect.transform.rotation);
             // GuardianUpgradedEffect.transform.SetParent(CubeGuardian.transform);
-            var pos = GuardianUpgradedEffect.transform.position;
+            var pos = upgradedGuardianEffect.transform.position;
             pos.y += 2f;
-            GuardianUpgradedEffect.transform.position = pos;
-            
+            upgradedGuardianEffect.transform.position = pos;
+
             GuardianGameObject.GetComponent<Guardian>().UpgradeGuardian();
 
             // 触发一下鼠标Hover，修改格子颜色
@@ -62,7 +63,17 @@ public class MapCube : MonoBehaviour
 
     public void DeleteGuardian()
     {
+        if (GuardianGameObject != null)
+        {
+            Destroy(GuardianGameObject);
+            GuardianGameObject = null;
+            CubeGuardian = null;
+        }
 
+        if (upgradedGuardianEffect != null)
+        {
+            Destroy(upgradedGuardianEffect);
+        }
     }
 
     // 放了一个守卫之后，鼠标在其碰撞范围内hover方块就不能变色了，去Project Setting里面的Physic把Queries Trigger Hit关掉
