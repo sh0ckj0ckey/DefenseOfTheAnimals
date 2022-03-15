@@ -75,7 +75,7 @@ public class BuildManager : MonoBehaviour
                         }
                         else if (SelectedGuardian.type == GuardianType.Upgrade)
                         {
-                            if (mapCube.GuardianGameObject == null && mapCube.CubeGuardian != null && mapCube.CubeGuardian.bGuardianUpgraded == false)
+                            if (mapCube.GuardianGameObject != null && mapCube.CubeGuardian != null && mapCube.CubeGuardian.bGuardianUpgraded == false)
                             {
                                 //Éý¼¶
                                 if (Money >= SelectedGuardian.UpgradeCost)
