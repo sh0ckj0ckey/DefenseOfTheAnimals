@@ -47,37 +47,66 @@ public class BuildManager : MonoBehaviour
         {
             if (EventSystem.current.IsPointerOverGameObject() == false)
             {
-                if (SelectedGuardian.type == GuardianType.Cactus ||
-                    SelectedGuardian.type == GuardianType.SoulStream ||
-                    SelectedGuardian.type == GuardianType.ChainLightning ||
-                    SelectedGuardian.type == GuardianType.Upgrade)
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                var map = LayerMask.GetMask("MapCube");
+                bool isCollider = Physics.Raycast(ray, out hit, 1000, map);
+                if (isCollider)
                 {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
-                    var map = LayerMask.GetMask("MapCube");
-                    bool isCollider = Physics.Raycast(ray, out hit, 1000, map);
-                    if (isCollider)
+                    MapCube mapCube = hit.collider.GetComponent<MapCube>();   // 得到点击的MapCube
+                    if (mapCube != null)
                     {
-                        MapCube mapCube = hit.collider.GetComponent<MapCube>();   // 得到点击的MapCube
-                        if (mapCube != null && mapCube.CubeGuardian == null)
+                        if (SelectedGuardian.type == GuardianType.Cactus ||
+                            SelectedGuardian.type == GuardianType.SoulStream ||
+                            SelectedGuardian.type == GuardianType.ChainLightning)
                         {
-                            if (Money >= SelectedGuardian.Cost)
+                            if (mapCube.GuardianGameObject == null)
                             {
-                                AddMoney(-SelectedGuardian.Cost);
-                                mapCube.SummonGuardian(SelectedGuardian.GuardianPrefab);
-                            }
-                            else
-                            {
-                                MoneyAnimator.SetTrigger("Flick");
+                                if (Money >= SelectedGuardian.Cost)
+                                {
+                                    AddMoney(-SelectedGuardian.Cost);
+                                    mapCube.SummonGuardian(SelectedGuardian.GuardianPrefab);
+                                }
+                                else
+                                {
+                                    MoneyAnimator.SetTrigger("Flick");
+                                }
                             }
                         }
-                        else if (mapCube != null && mapCube.bGuardianUpgraded == false)
+                        else if (SelectedGuardian.type == GuardianType.Upgrade)
                         {
-                            //升级
-                            if (Money >= SelectedGuardian.UpgradeCost)
+                            if (mapCube.GuardianGameObject != null && mapCube.bGuardianUpgraded == false)
                             {
-                                AddMoney(-SelectedGuardian.UpgradeCost);
-                                mapCube.UpgradeGuardian();
+                                //升级
+                                if (Money >= SelectedGuardian.UpgradeCost)
+                                {
+                                    AddMoney(-SelectedGuardian.UpgradeCost);
+                                    mapCube.UpgradeGuardian();
+                                }
+                            }
+                        }
+                        else if (SelectedGuardian.type == GuardianType.Delete)
+                        {
+                            if (mapCube.GuardianGameObject != null)
+                            {
+                                //拆除
+                                var guardian = mapCube.GuardianGameObject.GetComponent<Guardian>();
+                                int money = 0;
+                                switch (guardian.GuardianType)
+                                {
+                                    case GuardianType.Cactus:
+                                        money = CactusGuardian.Cost*(0.5+);
+                                        break;
+                                    case GuardianType.SoulStream:
+                                        money = SoulStreamGuardian.Cost;
+                                        break;
+                                    case GuardianType.ChainLightning:
+                                        money = ChainLightningGuardian.Cost;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                AddMoney(0);
                             }
                         }
                     }

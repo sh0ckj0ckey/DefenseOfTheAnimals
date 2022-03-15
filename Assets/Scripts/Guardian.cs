@@ -11,36 +11,19 @@ public class Guardian : MonoBehaviour
 
     Animator animator;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Enemy")
-        {
-            enemiesList.Add(other.gameObject);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Enemy")
-        {
-            enemiesList.Remove(other.gameObject);
-        }
-    }
-
-    private float cactusAttackRate = 1.2f;          // 攻击频率(x秒/次)
+    private float cactusAttackRate = 1.2f;              // 攻击频率(x秒/次)
     private float cactusAttackTimer = 0;
-    private float cactusAttackDamage = 20;            // 伤害值
+    private float cactusAttackDamage = 20;              // 伤害值
 
-    private float soulStreamDamageRate = 40f;       // 伤害值(伤害/秒)
+    private float soulStreamDamageRate = 40f;           // 伤害值(伤害/秒)
 
-    private float chainLightningAttackRate = 1.4f;  // 攻击频率(x秒/次)
+    private float chainLightningAttackRate = 1.4f;      // 攻击频率(x秒/次)
     private float chainLightningAttackTimer = 0;
-    private float chainLightningAttackDamage = 40;    // 伤害值
-    private float chainLightningLeapDamage = 30;      // 跳跃伤害值
-    private float chainLightningSlowdownTime = 1;     // 减速时间(秒)
+    private float chainLightningAttackDamage = 40;      // 伤害值
+    private float chainLightningLeapDamage = 30;        // 跳跃伤害值
+    private float chainLightningSlowdownTime = 1;       // 减速时间(秒)
 
-    private int guardianLevel = 0;                  // 守卫等级(升级+1)
-    private const int guardianMaxLevel = 1;               // 目前最多升到1级
+    public bool bGuardianUpgraded = false;                     // 是否升级
 
     public Transform FirePosition;
 
@@ -167,18 +150,18 @@ public class Guardian : MonoBehaviour
     /// </summary>
     public void UpgradeGuardian()
     {
-        if (guardianLevel < guardianMaxLevel)
+        if (bGuardianUpgraded == false)
         {
-            guardianLevel += 1;
+            bGuardianUpgraded = true;
+
+            this.cactusAttackDamage *= (1f + 1.5f);
+
+            this.soulStreamDamageRate *= (1f + 1.8f);
+
+            this.chainLightningAttackDamage *= (1f + 1.5f);
+            this.chainLightningLeapDamage *= (1f + 1f);
+            this.chainLightningSlowdownTime *= (1f + 0.5f);
         }
-
-        this.cactusAttackDamage *= (1f + guardianLevel * 1.5f);
-
-        this.soulStreamDamageRate *= (1f + guardianLevel * 1.8f);
-
-        this.chainLightningAttackDamage *= (1f + guardianLevel * 1.5f);
-        this.chainLightningLeapDamage *= (1f + guardianLevel);
-        this.chainLightningSlowdownTime *= (1f + guardianLevel * 0.5f);
     }
 
     void CactusAttack(float damage)
@@ -216,7 +199,22 @@ public class Guardian : MonoBehaviour
         {
             chainLightningAttackTimer = chainLightningAttackRate;
         }
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            enemiesList.Add(other.gameObject);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            enemiesList.Remove(other.gameObject);
+        }
     }
 
     void UpdateEnemies()

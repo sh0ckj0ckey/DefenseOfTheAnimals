@@ -6,15 +6,15 @@ using UnityEngine.EventSystems;
 public class MapCube : MonoBehaviour
 {
     [HideInInspector]
-    public GameObject CubeGuardian;             // 当前格子上放置的守卫
+    public GameObject GuardianGameObject;               // 当前格子上放置的守卫
 
     [HideInInspector]
-    public bool bGuardianUpgraded = false;  // 当前格子上的守卫是否已经升级
+    public Guardian CubeGuardian;                       // 当前格子上放置的守卫
 
-    public GameObject GuardianBuildEffect;
-    public GameObject GuardianUpgradedEffect;   // 升级守卫光环特效
+    public GameObject GuardianBuildEffect;              // 放置守卫特效
+    public GameObject GuardianUpgradedEffect;           // 升级守卫光环特效
 
-    private Renderer render;
+    private Renderer cubeRenderer;
 
     private Material originMaterial = null;
 
@@ -25,13 +25,14 @@ public class MapCube : MonoBehaviour
 
     private void Start()
     {
-        render = GetComponent<Renderer>();
-        originMaterial = render.material;
+        cubeRenderer = GetComponent<Renderer>();
+        originMaterial = cubeRenderer.material;
     }
 
     public void SummonGuardian(GameObject guardianPrefab)
     {
-        CubeGuardian = GameObject.Instantiate(guardianPrefab, transform.position, Quaternion.identity);    //角度 4个0
+        GuardianGameObject = GameObject.Instantiate(guardianPrefab, transform.position, Quaternion.identity);    //角度 4个0
+        CubeGuardian = GuardianGameObject.GetComponent<Guardian>();
 
         var pos = transform.position;
         pos.y += 2f;
@@ -44,20 +45,24 @@ public class MapCube : MonoBehaviour
 
     public void UpgradeGuardian()
     {
-        if (CubeGuardian != null && bGuardianUpgraded == false)
+        if (GuardianGameObject != null && CubeGuardian.bGuardianUpgraded == false)
         {
             GuardianUpgradedEffect = GameObject.Instantiate(GuardianUpgradedEffect, transform.position, GuardianUpgradedEffect.transform.rotation);
             // GuardianUpgradedEffect.transform.SetParent(CubeGuardian.transform);
             var pos = GuardianUpgradedEffect.transform.position;
             pos.y += 2f;
             GuardianUpgradedEffect.transform.position = pos;
-            bGuardianUpgraded = true;
-
-            CubeGuardian.GetComponent<Guardian>().UpgradeGuardian();
+            
+            GuardianGameObject.GetComponent<Guardian>().UpgradeGuardian();
 
             // 触发一下鼠标Hover，修改格子颜色
             OnMouseEnter();
         }
+    }
+
+    public void DeleteGuardian()
+    {
+
     }
 
     // 放了一个守卫之后，鼠标在其碰撞范围内hover方块就不能变色了，去Project Setting里面的Physic把Queries Trigger Hit关掉
@@ -67,27 +72,27 @@ public class MapCube : MonoBehaviour
         {
             GuardianType selectedType = BuildManager.Instance.SelectedGuardian.type;
 
-            if (CubeGuardian == null && selectedType != GuardianType.Delete && selectedType != GuardianType.Upgrade)
+            if (GuardianGameObject == null && selectedType != GuardianType.Delete && selectedType != GuardianType.Upgrade)
             {
-                render.material = hoverMaterial;
-                render.material.color = Color.green;
+                cubeRenderer.material = hoverMaterial;
+                cubeRenderer.material.color = Color.green;
             }
-            else if (CubeGuardian != null && selectedType == GuardianType.Delete)
+            else if (GuardianGameObject != null && selectedType == GuardianType.Delete)
             {
-                render.material = hoverMaterial;
-                render.material.color = deleteColor;
+                cubeRenderer.material = hoverMaterial;
+                cubeRenderer.material.color = deleteColor;
             }
-            else if (CubeGuardian != null && selectedType == GuardianType.Upgrade && bGuardianUpgraded == false)
+            else if (GuardianGameObject != null && selectedType == GuardianType.Upgrade && CubeGuardian.bGuardianUpgraded == false)
             {
-                render.material = hoverMaterial;
-                render.material.color = upgradeColor;
+                cubeRenderer.material = hoverMaterial;
+                cubeRenderer.material.color = upgradeColor;
             }
         }
     }
 
     private void OnMouseExit()
     {
-        render.material = originMaterial;
-        render.material.color = Color.white;
+        cubeRenderer.material = originMaterial;
+        cubeRenderer.material.color = Color.white;
     }
 }
