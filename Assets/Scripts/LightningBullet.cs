@@ -11,21 +11,25 @@ public class LightningBullet : MonoBehaviour
     // ÌøÔ¾¼ì²â·¶Î§
     public static int LightningChainLeapRadius = 8;
 
-    public int Damage = 40;
-    public int LeapDamage = 30;
     public float Speed = 30;
 
     private float distanceArriveTarget = 1.2f;
 
     private Transform target;
+    private float damage = 40;
+    private float leapDamage = 30;
+    private float slowdownTime = 1;
 
     public GameObject ChainLightningPrefab;
 
     public GameObject ExplosionEffectPrefab;
 
-    public void SetTarget(Transform tar)
+    public void InitBullet(Transform target, float damage, float leapDamage, float slowdownTime)
     {
-        target = tar;
+        this.target = target;
+        this.damage = damage;
+        this.leapDamage = leapDamage;
+        this.slowdownTime = slowdownTime;
     }
 
     void Update()
@@ -44,7 +48,7 @@ public class LightningBullet : MonoBehaviour
         if (dir.magnitude < distanceArriveTarget)
         {
             long chainId = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-            target.GetComponent<Enemy>().TakeLightningDamage(Damage, LeapDamage, chainId, ChainLightningPrefab);
+            target.GetComponent<Enemy>().TakeLightningDamage(damage, leapDamage, slowdownTime, chainId, ChainLightningPrefab);
             DestroyBullet();
         }
     }

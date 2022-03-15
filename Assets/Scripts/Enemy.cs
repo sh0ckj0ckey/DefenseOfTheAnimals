@@ -132,7 +132,7 @@ public class Enemy : MonoBehaviour
     /// <param name="damage">伤害值</param>
     /// <param name="leapDamage">跳跃伤害</param>
     /// <param name="chainId">这条连环闪电的ID，用于标记受到作用的敌人</param>
-    public void TakeLightningDamage(float damage, float leapDamage, long chainId, GameObject chainLightningPrefab)
+    public void TakeLightningDamage(float damage, float leapDamage, float slowdownTime, long chainId, GameObject chainLightningPrefab)
     {
         DebuffTag = chainId;
         TakeLightningLeap(leapDamage, 0, chainId, chainLightningPrefab);
@@ -157,7 +157,7 @@ public class Enemy : MonoBehaviour
                 StartCoroutine(DelayInvoker.DelayToInvoke(() =>
                 {
                     speed = origSpeed;
-                }, 1f));
+                }, slowdownTime));
             }
         }
         else

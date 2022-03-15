@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CactusBullet : MonoBehaviour
 {
-    public int Damage = 20;
     public float Speed = 20;
 
     public GameObject ExplosionEffectPrefab;
@@ -12,10 +11,12 @@ public class CactusBullet : MonoBehaviour
     private float distanceArriveTarget = 1.2f;
 
     private Transform target;
+    private float damage = 20;
 
-    public void SetTarget(Transform tar)
+    public void InitBullet(Transform targetEnemy, float damage)
     {
-        target = tar;
+        this.target = targetEnemy;
+        this.damage = damage;
     }
 
     void Update()
@@ -32,7 +33,7 @@ public class CactusBullet : MonoBehaviour
         Vector3 dir = target.position - transform.position;
         if (dir.magnitude < distanceArriveTarget)
         {
-            target.GetComponent<Enemy>().TakeCactusDamage(Damage);
+            target.GetComponent<Enemy>().TakeCactusDamage(damage);
             DestroyBullet();
         }
     }

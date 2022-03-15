@@ -2090,11 +2090,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GuardianType: 0
   enemiesList: []
-  CactusPrefab: {fileID: 6351011985745345711, guid: a52fb49529438554fb74515043adb565, type: 3}
   FirePosition: {fileID: 5918037023502006018}
+  CactusPrefab: {fileID: 6351011985745345711, guid: a52fb49529438554fb74515043adb565, type: 3}
   SoulStreamLineRenderer: {fileID: 0}
   SoulStreamHitEffect: {fileID: 0}
-  ChainLightningPrefab: {fileID: 2946145779337341030, guid: ed9e6b3813a00ae4b8dac92a8cc33dce, type: 3}
+  LightningPrefab: {fileID: 0}
 --- !u!135 &1574823537
 SphereCollider:
   m_ObjectHideFlags: 0

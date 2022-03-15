@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ViewController : MonoBehaviour
 {
+    // 是否启用
+    private bool bIsEnable = true;
+
     public float MoveSpeed = 1f;    // 相机移动速度
     public float ZoomSpeed = 256f;  // 相机升降速度
+
+    public GameObject CameraToggle;
 
     [Header("相机活动范围")]
     public float MaxHorizonAxis = 396;
@@ -20,11 +26,25 @@ public class ViewController : MonoBehaviour
     /// </summary>
     private float mouseOffset = 0.01f;
 
+    private void Awake()
+    {
+        var toggle = CameraToggle.GetComponent<Toggle>();
+        toggle.onValueChanged.AddListener((isOn) => { bIsEnable = isOn; });
+        bIsEnable = toggle.isOn;
+    }
+
+    //private void OnCameraMoveChanged(bool isOn)
+    //{
+    //    bIsEnable = isOn;
+    //}
 
     private void Update()
     {
-        mouseInScreenBoundMoveView();
-        mouseScrollWheelChangeView();
+        if (bIsEnable)
+        {
+            mouseInScreenBoundMoveView();
+            mouseScrollWheelChangeView();
+        }
     }
 
     /// <summary>

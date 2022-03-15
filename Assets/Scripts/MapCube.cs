@@ -6,11 +6,13 @@ using UnityEngine.EventSystems;
 public class MapCube : MonoBehaviour
 {
     [HideInInspector]
-    public GameObject CubeGuardian;         // 当前格子上放置的守卫
+    public GameObject CubeGuardian;             // 当前格子上放置的守卫
 
+    [HideInInspector]
     public bool bGuardianUpgraded = false;  // 当前格子上的守卫是否已经升级
 
-    public GameObject buildEffect;
+    public GameObject GuardianBuildEffect;
+    public GameObject GuardianUpgradedEffect;   // 升级守卫光环特效
 
     private Renderer render;
 
@@ -33,11 +35,29 @@ public class MapCube : MonoBehaviour
 
         var pos = transform.position;
         pos.y += 2f;
-        GameObject effect = GameObject.Instantiate(buildEffect, pos, buildEffect.transform.rotation);    //保持物体原来调过的角度
+        GameObject effect = GameObject.Instantiate(GuardianBuildEffect, pos, GuardianBuildEffect.transform.rotation);    //保持物体原来调过的角度
         Destroy(effect, 2);
 
         // 触发一下鼠标Hover，修改格子颜色
-        //OnMouseEnter();
+        OnMouseEnter();
+    }
+
+    public void UpgradeGuardian()
+    {
+        if (CubeGuardian != null && bGuardianUpgraded == false)
+        {
+            GuardianUpgradedEffect = GameObject.Instantiate(GuardianUpgradedEffect, transform.position, GuardianUpgradedEffect.transform.rotation);
+            // GuardianUpgradedEffect.transform.SetParent(CubeGuardian.transform);
+            var pos = GuardianUpgradedEffect.transform.position;
+            pos.y += 2f;
+            GuardianUpgradedEffect.transform.position = pos;
+            bGuardianUpgraded = true;
+
+            CubeGuardian.GetComponent<Guardian>().UpgradeGuardian();
+
+            // 触发一下鼠标Hover，修改格子颜色
+            OnMouseEnter();
+        }
     }
 
     // 放了一个守卫之后，鼠标在其碰撞范围内hover方块就不能变色了，去Project Setting里面的Physic把Queries Trigger Hit关掉

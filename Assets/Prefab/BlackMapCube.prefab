@@ -108,6 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21331c9a8614b64489ce1ff7cf6ec21e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turretGo: {fileID: 0}
-  buildEffect: {fileID: 7414718273803070524, guid: 70180cd291c4297409d1cb2029b3283d, type: 3}
+  CubeGuardian: {fileID: 0}
+  bGuardianUpgraded: 0
+  GuardianBuildEffect: {fileID: 7414718273803070524, guid: 70180cd291c4297409d1cb2029b3283d, type: 3}
+  GuardianUpgradedEffect: {fileID: 1416162443787550199, guid: 8e939325af01b5f4da52c7512d9ad232, type: 3}
   hoverMaterial: {fileID: 2100000, guid: b516a6be52730f64e98b8928895f48b0, type: 2}

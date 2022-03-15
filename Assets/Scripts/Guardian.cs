@@ -29,11 +29,18 @@ public class Guardian : MonoBehaviour
 
     private float cactusAttackRate = 1.2f;          // 攻击频率(x秒/次)
     private float cactusAttackTimer = 0;
+    private float cactusAttackDamage = 20;            // 伤害值
 
     private float soulStreamDamageRate = 40f;       // 伤害值(伤害/秒)
 
     private float chainLightningAttackRate = 1.4f;  // 攻击频率(x秒/次)
     private float chainLightningAttackTimer = 0;
+    private float chainLightningAttackDamage = 40;    // 伤害值
+    private float chainLightningLeapDamage = 30;      // 跳跃伤害值
+    private float chainLightningSlowdownTime = 1;     // 减速时间(秒)
+
+    private int guardianLevel = 0;                  // 守卫等级(升级+1)
+    private const int guardianMaxLevel = 1;               // 目前最多升到1级
 
     public Transform FirePosition;
 
@@ -74,7 +81,7 @@ public class Guardian : MonoBehaviour
                     animator.SetTrigger("IsCactusAttacking");
                     StartCoroutine(DelayInvoker.DelayToInvoke(() =>
                     {
-                        CactusAttack();
+                        CactusAttack(cactusAttackDamage);
                     }, 0.3f));
                 }
             }
@@ -148,14 +155,33 @@ public class Guardian : MonoBehaviour
                     animator.SetTrigger("IsLightningAttacking");
                     StartCoroutine(DelayInvoker.DelayToInvoke(() =>
                     {
-                        ChainLightningAttack();
+                        ChainLightningAttack(chainLightningAttackDamage, chainLightningLeapDamage, chainLightningSlowdownTime);
                     }, 0.3f));
                 }
             }
         }
     }
 
-    void CactusAttack()
+    /// <summary>
+    /// 升级守卫，处理伤害值的提升
+    /// </summary>
+    public void UpgradeGuardian()
+    {
+        if (guardianLevel < guardianMaxLevel)
+        {
+            guardianLevel += 1;
+        }
+
+        this.cactusAttackDamage *= (1f + guardianLevel * 1.5f);
+
+        this.soulStreamDamageRate *= (1f + guardianLevel * 1.8f);
+
+        this.chainLightningAttackDamage *= (1f + guardianLevel * 1.5f);
+        this.chainLightningLeapDamage *= (1f + guardianLevel);
+        this.chainLightningSlowdownTime *= (1f + guardianLevel * 0.5f);
+    }
+
+    void CactusAttack(float damage)
     {
         if (enemiesList.Count <= 0 || enemiesList[0] == null)
         {
@@ -165,7 +191,7 @@ public class Guardian : MonoBehaviour
         if (enemiesList.Count > 0)
         {
             var bullet = GameObject.Instantiate(CactusPrefab, FirePosition.position, FirePosition.rotation);
-            bullet.GetComponent<CactusBullet>().SetTarget(enemiesList[0].transform);
+            bullet.GetComponent<CactusBullet>().InitBullet(enemiesList[0].transform, damage);
         }
         else
         {
@@ -174,7 +200,7 @@ public class Guardian : MonoBehaviour
 
     }
 
-    void ChainLightningAttack()
+    void ChainLightningAttack(float damage, float leapDamage, float slowdownTime)
     {
         if (enemiesList.Count <= 0 || enemiesList[0] == null)
         {
@@ -184,7 +210,7 @@ public class Guardian : MonoBehaviour
         if (enemiesList.Count > 0)
         {
             var bullet = GameObject.Instantiate(LightningPrefab, FirePosition.position, FirePosition.rotation);
-            bullet.GetComponent<LightningBullet>().SetTarget(enemiesList[0].transform);
+            bullet.GetComponent<LightningBullet>().InitBullet(enemiesList[0].transform, damage, leapDamage, slowdownTime);
         }
         else
         {

@@ -49,7 +49,8 @@ public class BuildManager : MonoBehaviour
             {
                 if (SelectedGuardian.type == GuardianType.Cactus ||
                     SelectedGuardian.type == GuardianType.SoulStream ||
-                    SelectedGuardian.type == GuardianType.ChainLightning)
+                    SelectedGuardian.type == GuardianType.ChainLightning ||
+                    SelectedGuardian.type == GuardianType.Upgrade)
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hit;
@@ -58,7 +59,7 @@ public class BuildManager : MonoBehaviour
                     if (isCollider)
                     {
                         MapCube mapCube = hit.collider.GetComponent<MapCube>();   // 得到点击的MapCube
-                        if (mapCube.CubeGuardian == null)
+                        if (mapCube != null && mapCube.CubeGuardian == null)
                         {
                             if (Money >= SelectedGuardian.Cost)
                             {
@@ -70,9 +71,14 @@ public class BuildManager : MonoBehaviour
                                 MoneyAnimator.SetTrigger("Flick");
                             }
                         }
-                        else
+                        else if (mapCube != null && mapCube.bGuardianUpgraded == false)
                         {
                             //升级
+                            if (Money >= SelectedGuardian.UpgradeCost)
+                            {
+                                AddMoney(-SelectedGuardian.UpgradeCost);
+                                mapCube.UpgradeGuardian();
+                            }
                         }
                     }
                 }
