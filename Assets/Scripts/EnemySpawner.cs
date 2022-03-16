@@ -2,14 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class EnemyWave
+{
+    public GameObject EnemyPrefab;
+    public int Count;
+    public float Rate;
+    public float SpawnDelay;
+}
+
 public class EnemySpawner : MonoBehaviour
 {
     public static int EnemyAliveCount = 0;
-    public Wave[] Waves;
+    public EnemyWave[] Waves;
     public Transform StartPoint;
     public float WaveRate = 3;
 
     void Start()
+    {
+        
+    }
+
+    public void StartSpawningEnemy()
     {
         StartCoroutine(SpawnEnemy());
     }

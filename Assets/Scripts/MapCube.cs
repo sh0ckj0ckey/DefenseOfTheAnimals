@@ -98,6 +98,11 @@ public class MapCube : MonoBehaviour
                 cubeRenderer.material = hoverMaterial;
                 cubeRenderer.material.color = upgradeColor;
             }
+            else
+            {
+                cubeRenderer.material = originMaterial;
+                cubeRenderer.material.color = Color.white;
+            }
         }
     }
 
