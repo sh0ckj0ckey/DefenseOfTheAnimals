@@ -6,37 +6,29 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameMenuController : MonoBehaviour
+public class GameMainSceneController : MonoBehaviour
 {
     public GameObject IntergradeImage;
     public float FadeSpeed = 0.05f;
 
-    public void OnStartGame()
+    private void StartSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "MainScene")
+        {
+            ResetIntergradeImage();
+            EnemySpawner.Instance.StartSpawningEnemy();
+        }
+    }
+
+    public void OnClickBack2Home()
     {
         StartCoroutine(FadeImage());
 
         StartCoroutine(DelayInvoker.DelayToInvoke(() =>
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(0);
             SceneManager.sceneLoaded += StartSceneLoaded;
         }, 1));
-    }
-
-    private void StartSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == "StartScene")
-        {
-            ResetIntergradeImage();
-        }
-    }
-
-    public void OnExitGame()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
     }
 
     private IEnumerator FadeImage()

@@ -74,6 +74,9 @@ public class MapCube : MonoBehaviour
         {
             Destroy(upgradedGuardianEffect);
         }
+
+        // 触发一下鼠标Hover，修改格子颜色
+        OnMouseEnter();
     }
 
     // 放了一个守卫之后，鼠标在其碰撞范围内hover方块就不能变色了，去Project Setting里面的Physic把Queries Trigger Hit关掉

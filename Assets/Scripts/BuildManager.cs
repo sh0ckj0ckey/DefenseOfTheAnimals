@@ -158,4 +158,10 @@ public class BuildManager : MonoBehaviour
             SelectedGuardian = UpgradeGuardian;
         }
     }
+
+    public void GiveMeMoney(double money)
+    {
+        Money = money;
+        MoneyText.text = Money.ToString();
+    }
 }
