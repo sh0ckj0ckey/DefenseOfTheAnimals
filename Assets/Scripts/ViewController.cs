@@ -12,6 +12,8 @@ public class ViewController : MonoBehaviour
     public float ZoomSpeed = 256f;  // 相机升降速度
 
     public GameObject CameraToggle;
+    public Image CameraOnImage;
+    public Image CameraOffImage;
 
     [Header("相机活动范围")]
     public float MaxHorizonAxis = 396;
@@ -29,14 +31,22 @@ public class ViewController : MonoBehaviour
     private void Awake()
     {
         var toggle = CameraToggle.GetComponent<Toggle>();
-        toggle.onValueChanged.AddListener((isOn) => { bIsEnable = isOn; });
-        bIsEnable = toggle.isOn;
+        toggle.onValueChanged.AddListener(OnCameraMoveChanged);
+        OnCameraMoveChanged(toggle.isOn);
     }
 
-    //private void OnCameraMoveChanged(bool isOn)
-    //{
-    //    bIsEnable = isOn;
-    //}
+    private void OnCameraMoveChanged(bool isOn)
+    {
+        bIsEnable = isOn;
+        if (isOn)
+        {
+            CameraOffImage.enabled = false;
+        }
+        else
+        {
+            CameraOffImage.enabled = true;
+        }
+    }
 
     private void Update()
     {
