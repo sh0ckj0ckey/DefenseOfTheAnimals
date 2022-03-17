@@ -21,10 +21,11 @@ public class CmdManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            if (!string.IsNullOrEmpty(CmdTextBox.text))
+            if (CmdTextBox.isFocused)
             {
                 DealWithCommand(CmdTextBox.text);
                 CmdTextBox.text = "";
+                CmdTextBox.DeactivateInputField();
             }
             else
             {
@@ -36,8 +37,7 @@ public class CmdManager : MonoBehaviour
 
     public void OnEditEnd()
     {
-        //lastCmdText = CmdTextBox.text;
-        //CmdTextBox.text = "";
+        CmdTextBox.text = "";
     }
 
     private void DealWithCommand(string cmd)
