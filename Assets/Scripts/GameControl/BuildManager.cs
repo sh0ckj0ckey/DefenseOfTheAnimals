@@ -13,6 +13,7 @@ public class BuildManager : MonoBehaviour
     public GuardianData ChainLightningGuardian;
 
     public GuardianData ChaosMeteor;
+    public GuardianData Portal;
     public GuardianData DeleteGuardian;
     public GuardianData UpgradeGuardian;
 
@@ -142,6 +143,13 @@ public class BuildManager : MonoBehaviour
         if (isOn)
         {
             SelectedGuardian = ChaosMeteor;
+        }
+    }
+    public void OnPortalSelected(bool isOn)
+    {
+        if (isOn)
+        {
+            SelectedGuardian = Portal;
         }
     }
     public void OnDeleteGuardianSelected(bool isOn)
