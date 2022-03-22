@@ -30,6 +30,15 @@ public class CameraViewController : MonoBehaviour
 
     private void Awake()
     {
+        if (Screen.width >= 2560)
+        {
+            MoveSpeed = 0.01f;
+        }
+        else
+        {
+            MoveSpeed = 1f;
+        }
+
         var toggle = CameraToggle.GetComponent<Toggle>();
         toggle.onValueChanged.AddListener(OnCameraMoveChanged);
         OnCameraMoveChanged(toggle.isOn);

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class MapCube : MonoBehaviour
 {
     [HideInInspector]
-    public GameObject GuardianGameObject;               // 当前格子上放置的守卫
+    public GameObject GuardianGameObject;               // 当前格子上放置的守卫对应的GameObject
 
     [HideInInspector]
     public Guardian CubeGuardian;                       // 当前格子上放置的守卫

@@ -112,6 +112,40 @@ public class BuildManager : MonoBehaviour
                             }
                         }
                     }
+                    else
+                    {
+                        RoadCube roadCube = hit.collider.GetComponent<RoadCube>();
+                        if (roadCube != null)
+                        {
+                            if (roadCube.CubeItemGameObject == null)
+                            {
+                                if (SelectedGuardian.type == GuardianType.ChaosMeteor)
+                                {
+                                    //if (Money >= SelectedGuardian.Cost)
+                                    //{
+                                    //    AddMoney(-SelectedGuardian.Cost);
+                                    //    roadCube.SummonChaosMeteor(SelectedGuardian.GuardianPrefab);
+                                    //}
+                                    //else
+                                    //{
+                                    //    MoneyAnimator.SetTrigger("Flick");
+                                    //}
+                                }
+                                else if (SelectedGuardian.type == GuardianType.Portal)
+                                {
+                                    if (Money >= SelectedGuardian.Cost)
+                                    {
+                                        AddMoney(-SelectedGuardian.Cost);
+                                        //roadCube.SummonGuardian(SelectedGuardian.GuardianPrefab);
+                                    }
+                                    else
+                                    {
+                                        MoneyAnimator.SetTrigger("Flick");
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
