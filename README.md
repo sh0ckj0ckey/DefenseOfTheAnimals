@@ -7,3 +7,7 @@
 ![1.png](Assets/Icon/ScreenShot1.png)
 
 ![2.png](Assets/Icon/ScreenShot2.png)
+
+---
+Powered by Unity.
+2022 ShockJockey.
